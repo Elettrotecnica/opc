@@ -1,0 +1,10 @@
+{
+    "url": "opc.tcp://192.168.10.60:4840/",
+    "interval": 500,
+    "client_cert": "/var/www/oacs-5-10/packages/opc/certs/client_cert.der",
+    "client_key": "/var/www/oacs-5-10/packages/opc/certs/client_key.der",
+    "nodes": [
+	"ns=2;s=FATEK FB/FBs/B1/B1z Series.Tags.SECONDI DI LAVORO",
+	"ns=2;s=FATEK FB/FBs/B1/B1z Series.Tags.BIT RESET SECONDI LAVORO"
+    ]
+}
