@@ -53,17 +53,38 @@ ad_proc -private opc::monitor_servers {} {
     }
 }
 
-ad_proc -private opc::check_connection {} {
+ad_proc -private opc::_check_connection {
+    -url:required
+    -handle:required
+    -var:required
+} {
     Checks the connection.
 } {
-    uplevel {
-	if {[catch {opcua run C 0}]} {
-	    # this most likely is the server shutting down
+    upvar $var disconnected
+
+    try {
+	opcua run $handle 0
+    } on error {errMsg} {
+	ns_log warning "OPC Server '$url' - Contacting the server returned error: $errMsg"
+	try {
+	    opcua destroy $handle
+	} on error {errMsg} {
+	    ns_log warning "OPC Server '$url' - Destroying the client handle returned error: $errMsg"
+	} on ok {d} {
+	    ns_log warning "OPC Server '$url' - Client handle destroyed"
+	} finally {
 	    set disconnected 1
-	    opcua destroy C
+	    ns_log warning "OPC Server '$url' - Client is disconnected"
 	}
-	after 1000 opc::check_connection
+    } on ok {d} {
+	ns_log warning "OPC Server '$url' - Connection is operational"
     }
+
+    after 10000 \
+	opc::_check_connection \
+	-url $url \
+	-handle $handle \
+	-var disconnected
 }
 
 ad_proc -private opc::monitor {
@@ -143,7 +164,10 @@ ad_proc -private opc::monitor {
 	    incr i
 	}
 
-	opc::check_connection
+	opc::_check_connection \
+	    -var disconnected \
+	    -handle C \
+	    -url $url
 
 	vwait disconnected
 
