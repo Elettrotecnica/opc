@@ -150,6 +150,7 @@ ad_proc -private opc::monitor {
 			  url [::json::write string $url] \
 			  node [::json::write string $node] \
 			  value [::json::write string $value]]
+	    nsv_dict set ::opc::status_json $url $node $json
 	    # ns_log warning "Sending message on subscription 'opc-events':\n$json"
 	    ::ws::multicast opc-events [ns_connchan wsencode -opcode text $json]
 	}
