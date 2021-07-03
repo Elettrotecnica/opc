@@ -186,6 +186,7 @@ ad_proc -private opc::monitor {
 
 	} on error {errMsg} {
 	    ns_log warning "OPC Server '$url' - Connection failed: $errMsg"
+	    opcua destroy C
 	}
 
 	ns_log warning "OPC Server '$url' - Reconnecting in 10s..."
