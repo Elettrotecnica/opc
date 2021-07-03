@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<message_catalog package_key="opc" locale="it_IT" charset="ISO-8859-1">
+
+  <msg key="change_save_interval_interval">Intervallo</msg>
+  <msg key="change_save_interval_interval_helptext">L&#39;intervallo può essere espresso in unità di tempo (default sono secondi). Unità di tempo valide sono ms, s, m e d.</msg>
+  <msg key="change_save_interval_invalid_interval">Intervallo non valido</msg>
+  <msg key="change_save_interval_title">Cambia l&#39;intervallo per il salvataggio dello storico</msg>
+</message_catalog>

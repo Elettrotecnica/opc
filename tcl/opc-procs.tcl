@@ -193,3 +193,44 @@ ad_proc -private opc::monitor {
 	ns_sleep 10
     }
 }
+
+ad_proc -private opc::save_values {} {
+    Persists the current values in the database
+} {
+    if {![nsv_array exists ::opc::status]} {
+	ns_log warning {opc::save_values -  No values to persist...}
+	return
+    } else {
+	ns_log warning {opc::save_values -  Saving values.}
+    }
+    
+    set values [nsv_array get ::opc::status]
+    db_dml save_values {
+	insert into opc_historic_values (timestamp, values)
+	values (current_timestamp, :values)
+    }
+}
+
+ad_proc -private opc::save_values_reschedule {
+    -interval:required
+} {
+    Changes the interval for saving the values
+} {
+    if {[nsv_array exists ::opc::save_value_schedule]} {
+	set current_interval [nsv_get ::opc::save_value_schedule interval]
+	if {$interval eq $current_interval} {
+	    # No change, just exit
+	    return
+	}
+
+	# Unschedule the previous interval
+	set schedule_id [nsv_get ::opc::save_value_schedule schedule_id]
+	ns_unschedule_proc $schedule_id
+    }
+
+    # Schedule the new one
+    set schedule_id [ad_schedule_proc -thread t $interval opc::save_values]
+    nsv_array set ::opc::save_value_schedule [list \
+						  interval $interval \
+						  schedule_id $schedule_id]
+}

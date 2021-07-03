@@ -9,3 +9,5 @@ package require json::write
 opc::read_conf
 
 opc::monitor_servers
+
+opc::save_values_reschedule -interval 60m

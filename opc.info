@@ -9,14 +9,14 @@
     <implements-subsite-p>f</implements-subsite-p>
     <inherit-templates-p>f</inherit-templates-p>
 
-    <version name="0.1d" url="http://openacs.org/repository/download/apm/opc-0.1d.apm">
+    <version name="0.2d" url="http://openacs.org/repository/download/apm/opc-0.2d.apm">
         <owner url="mailto:antonio@elettrotecnica.it">Antonio Pisano</owner>
         <summary>OPC support and interface</summary>
         <vendor url="http://www.elettrotecnica.it">L&#39;Elettrotecnica S.r.l.</vendor>
         <description format="text/html">This package implements OPC support and interfaces for automation</description>
         <maturity>0</maturity>
 
-        <provides url="opc" version="0.1d"/>
+        <provides url="opc" version="0.2d"/>
 
         <callbacks>
         </callbacks>
