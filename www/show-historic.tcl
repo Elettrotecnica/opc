@@ -19,10 +19,14 @@ db_foreach get_historic {
     order by timestamp desc
 } {
     foreach {url data} $values {
-	foreach k [dict keys $data] {
-	    set keys($k) 1
+	set row [list timestamp $timestamp server $url {*}$data]
+	foreach {key value} $data {
+	    set key [lindex [split $key .] end]
+	    regsub -all {[^\w]} $key {_} key
+	    set keys($key) 1
+	    lappend row $key $value
 	}
-	lappend rows [list timestamp $timestamp server $url {*}$data]
+	lappend rows $row
     }
 }
 
@@ -38,9 +42,10 @@ set elements {
 set column_names [lsort [array names keys]]
 
 foreach n $column_names {
+    regsub -all {_} $n { } label
     append elements " " [list \
 			     $n [list \
-				     label $n \
+				     label $label \
 				    ]]
 }
 
