@@ -5,4 +5,8 @@
   <msg key="change_save_interval_interval_helptext">The interval can be specified with time units (per default seconds). Valid time units are ms, s, m, d.</msg>
   <msg key="change_save_interval_invalid_interval">Invalid interval</msg>
   <msg key="change_save_interval_title">Change historical data save interval</msg>
+  <msg key="display_values_title">Display monitored values</msg>
+  <msg key="download_csv">Download CSV</msg>
+  <msg key="download_csv_title">Download displayed values as CSV</msg>
+  <msg key="show_historic_title">Show historic values</msg>
 </message_catalog>

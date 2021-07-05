@@ -5,4 +5,8 @@
   <msg key="change_save_interval_interval_helptext">L&#39;intervallo può essere espresso in unità di tempo (default sono secondi). Unità di tempo valide sono ms, s, m e d.</msg>
   <msg key="change_save_interval_invalid_interval">Intervallo non valido</msg>
   <msg key="change_save_interval_title">Cambia l&#39;intervallo per il salvataggio dello storico</msg>
+  <msg key="display_values_title">Mostra i valori monitorati</msg>
+  <msg key="download_csv">Scarica CSV</msg>
+  <msg key="download_csv_title">Scarica i valori visualizzati in formato CSV</msg>
+  <msg key="show_historic_title">Mostra lo storico</msg>
 </message_catalog>
