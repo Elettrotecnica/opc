@@ -1,7 +1,10 @@
 ad_page_contract {
     Visualize the historic values collected over time.
 } {
-    {backward_interval:notnull "1 week"}
+    {years:naturalnum,notnull 0}
+    {months:naturalnum,notnull 0}
+    {weeks:naturalnum,notnull 1}
+    {days:naturalnum,notnull 0}
     {format normal}
 }
 
@@ -10,12 +13,23 @@ auth::require_login
 set context [list \
 		 [_ opc.show_historic_title]]
 
+set column_names {}
+foreach {url conf} [nsv_array get ::opc::conf] {
+    foreach key [dict get $conf nodes] {
+	set key [lindex [split $key .] end]
+	regsub -all {[^\w]} $key {_} key
+	lappend column_names $key
+    }
+}
 
 set rows [list]
 db_foreach get_historic {
     select timestamp, values
     from opc_historic_values
-    where timestamp >= current_timestamp - cast(:backward_interval as interval)
+    where timestamp >= current_timestamp - cast(
+      :years || ' years ' || :months || ' months ' || :weeks || ' weeks ' || :days || ' days'
+      as interval
+      )
     order by timestamp desc
 } {
     foreach {url data} $values {
@@ -23,7 +37,6 @@ db_foreach get_historic {
 	foreach {key value} $data {
 	    set key [lindex [split $key .] end]
 	    regsub -all {[^\w]} $key {_} key
-	    set keys($key) 1
 	    lappend row $key $value
 	}
 	lappend rows $row
@@ -38,8 +51,6 @@ set elements {
 	label "Server"
     }
 }
-
-set column_names [lsort [array names keys]]
 
 foreach n $column_names {
     regsub -all {_} $n { } label
@@ -62,13 +73,11 @@ foreach row $rows {
     template::multirow append history [dict get $row timestamp] [dict get $row server] {*}$values
 }
 
-set actions [list \
-		 "#opc.download_csv#" [export_vars -base [ad_conn url] -entire_form -no_empty {{format csv}}] "#opc.download_csv_title#"]
+set csv_url [export_vars -base [ad_conn url] -entire_form -no_empty {{format csv}}]
 
 template::list::create \
     -name history \
     -multirow history \
-    -actions $actions \
     -elements $elements
 
 if {$format eq "csv"} {
